@@ -33,25 +33,21 @@ static SPECIALS: &[(&str, u32)] = &[
 ("tvanimefreak", 54), ("tvtvanimefreak", 54)
 ];
 
+
 pub fn get_server(group: &str) -> String {
     // un for, nada especial.
-    for &x in SPECIALS { 
+    for &x in SPECIALS {
         if group == x.0 {
             return format!("s{}.chatango.com", x.1);
         }
     }
     let group = group.replace("_", "q").replace("-", "q"); //remplazo de caracteres
     //['a','b', 'c','d','e',] -> (5) -> "abcde"
-    let part1 = group.chars().take(5).collect::<String>(); 
-    let part2 = if group.len() >= 9 { // si el grupo es al menos 9
-        //['a','b', 'c','d','e','f','g', 'h', 'i'] -> [...6] -> ['g', 'h', 'i'] -> "ghi" 
-        group.chars().skip(6).take(3).collect::<String>()
-
-    } else { //si no, no buscaremos [6,7,8]
-        String::new() // creamos un string vacio
-    };
+    let part1 = group.chars().take(5).collect::<String>();
     let fnv = u32::from_str_radix(&part1, 36).unwrap(); //numero de base 10 -> func(36)-> numero base36 
-    let lnv = if !part2.is_empty() { //si no esta vacio
+    //['a','b', 'c','d','e','f','g', 'h', 'i'] -> [...6] -> ['g', 'h', 'i'] -> "ghi" 
+    let part2 = group.chars().skip(6).take(3).collect::<String>();
+    let lnv = if !part2.is_empty() { //si no esta vacio?
         let parsed = u32::from_str_radix(&part2, 36).unwrap(); //b10 -> func(b36) -> numero 
         std::cmp::max(parsed, 1000) // si es mayor se toma, si es menor sera 1000
     } else { // si el string esta vacio le ponemos 1000
@@ -61,13 +57,14 @@ pub fn get_server(group: &str) -> String {
     let maxsum: u32 = TSWEIGHTS.iter().map(|x| x[1]).sum(); // [[17,75],[18,75]...] -> [75, 75...] luego suma.
     let mut cumfreq = 0.0; // frecuencia relativa
     let mut sn = 0; // server
-    for x in TSWEIGHTS { // lo demas es igual a la libreria ch.py
+    for x in TSWEIGHTS { //lo demas es igual a la libreria ch.py
         cumfreq += x[1] as f64 / maxsum as f64;
-        if num <= cumfreq {
+        if num <= cumfreq { 
             sn = x[0];
             break;
         }
     }
+
     format!("s{}.chatango.com", sn)
 }
 
