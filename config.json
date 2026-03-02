@@ -1,0 +1,12 @@
+{
+    "prefix": ".",
+    "owner": "neokuze",
+    "disabled": ["history"],
+    "name_color": "000000",
+    "font_color": "FF0000",
+    "font_size": 11,
+    "font_face": 1,
+    "use_background": true,
+    "follow_styles": true,
+    "html": true
+}
